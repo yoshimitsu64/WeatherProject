@@ -13,7 +13,7 @@ import {
   selectCountryBit,
   selectWeather7Days, selectWeather7DaysBit,
 } from '../Redux/Selectors';
-import { days, months } from './DateInfo';
+import { days, months, date } from './DateInfo';
 import EachDayWeather from './EachDayWeather';
 import CurrentWeather from './CurrentWeather';
 import { getLocationAndWeatherBit } from '../Redux/weatherBitSlice';
@@ -29,7 +29,6 @@ function Background() {
   const cityWeatherBit = useSelector(selectCityBit);
   const countryWeatherBit = useSelector(selectCountryBit);
   const weather7DaysBit = useSelector(selectWeather7DaysBit);
-  const date = new Date();
   const [service, setService] = useState(null);
   const openWeather = {
     dayStorage: date.getDay(),
@@ -43,7 +42,6 @@ function Background() {
     countryStorage: countryWeatherBit,
     weather7DaysStorage: weather7DaysBit,
   };
-  console.log(weatherBit);
   const options = [
     { value: 0, label: 'OpenWeatherMap' },
     { value: 1, label: 'WeatherBit' },
@@ -61,7 +59,6 @@ function Background() {
     );
   }
   useEffect(() => {
-    console.log(service);
     // eslint-disable-next-line no-unused-expressions
     if (!localStorage.getItem('chosenService')) {
       localStorage.setItem('chosenService', JSON.stringify(options[0]));
@@ -72,7 +69,6 @@ function Background() {
       localStorage.setItem('chosenService', JSON.stringify(service));
     }
   }, [service]);
-  console.log(service?.value, service?.label);
   const openWeatherLocalStorage = JSON.parse(localStorage.getItem('openWeather'));
   const weatherBitLocalStorage = JSON.parse(localStorage.getItem('weatherBit'));
   // eslint-disable-next-line max-len
@@ -80,7 +76,6 @@ function Background() {
     case 'OpenWeatherMap':
       // eslint-disable-next-line max-len
       if (openWeatherLocalStorage?.dayStorage !== date.getDay() || openWeatherLocalStorage?.cityStorage === null) {
-        console.log('as');
         getCoordinates();
         localStorage.setItem('openWeather', JSON.stringify(openWeather));
       }
@@ -88,7 +83,6 @@ function Background() {
     case 'WeatherBit':
       // eslint-disable-next-line max-len
       if (weatherBitLocalStorage?.dayStorage !== date.getDay() || weatherBitLocalStorage?.cityStorage === null) {
-        console.log('as');
         getCoordinates();
         localStorage.setItem('weatherBit', JSON.stringify(weatherBit));
       }
