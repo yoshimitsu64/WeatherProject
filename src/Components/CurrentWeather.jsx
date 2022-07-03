@@ -1,5 +1,5 @@
 // eslint-disable-next-line react/prop-types
-function CurrentWeather({ serviceLocalStorage, service }) {
+function CurrentWeather({ serviceLocalStorage, service, openWeatherLocalStorage }) {
   // eslint-disable-next-line react/prop-types
   console.log(serviceLocalStorage?.weather7DaysStorage[0]?.temp?.day, service?.label);
   // eslint-disable-next-line react/prop-types,max-len
@@ -14,7 +14,7 @@ function CurrentWeather({ serviceLocalStorage, service }) {
 
         <div>
           {/* eslint-disable-next-line react/prop-types */}
-          {service?.label === 'OpenWeatherMap' ? serviceLocalStorage?.weather7DaysStorage[0]?.weather[0]?.main : serviceLocalStorage?.weather7DaysStorage[0]?.weather?.description}
+          <img alt="didnt load" src={service.label === 'OpenWeatherMap' ? `http://openweathermap.org/img/wn/${openWeatherLocalStorage?.weather7DaysStorage[0]?.weather[0]?.icon}@2x.png` : `https://www.weatherbit.io/static/img/icons/${serviceLocalStorage?.weather7DaysStorage[0]?.weather?.icon}.png`} />
         </div>
 
       </div>

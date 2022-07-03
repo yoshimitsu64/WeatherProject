@@ -1,5 +1,5 @@
 // eslint-disable-next-line react/prop-types
-function EachDayWeather({ temperature, weather }) {
+function EachDayWeather({ temperature, serviceLocalStorage, index }) {
   return (
     <div>
       <div>
@@ -7,7 +7,8 @@ function EachDayWeather({ temperature, weather }) {
         <sup>o</sup>
       </div>
       <div>
-        {weather}
+        {/* eslint-disable-next-line react/prop-types */}
+        <img src={`http://openweathermap.org/img/wn/${serviceLocalStorage?.weather7DaysStorage[index]?.weather[0]?.icon}@2x.png`} alt="didnt load" />
       </div>
     </div>
   );

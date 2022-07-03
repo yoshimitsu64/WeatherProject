@@ -17,6 +17,7 @@ import { days, months } from './DateInfo';
 import EachDayWeather from './EachDayWeather';
 import CurrentWeather from './CurrentWeather';
 import { getLocationAndWeatherBit } from '../Redux/weatherBitSlice';
+import EachDayWeatherBit from './EachDayWeatherBit';
 
 function Background() {
   const dispatch = useDispatch();
@@ -62,10 +63,10 @@ function Background() {
   useEffect(() => {
     console.log(service);
     // eslint-disable-next-line no-unused-expressions
-    if (localStorage.getItem('chosenService') === 'null') {
+    if (!localStorage.getItem('chosenService')) {
       localStorage.setItem('chosenService', JSON.stringify(options[0]));
       setService(JSON.parse(localStorage.getItem('chosenService')));
-    } else if (service === null || service === 'null') {
+    } else if (service === null) {
       setService(JSON.parse(localStorage.getItem('chosenService')));
     } else if (service) {
       localStorage.setItem('chosenService', JSON.stringify(service));
@@ -121,7 +122,7 @@ function Background() {
             {openWeatherLocalStorage?.countryStorage}
           </div>
           <Select
-            value={service?.label ? { label: `${service?.label}`, value: `${service?.value}` } : { label: 'none', value: 'none' }}
+            value={{ label: `${service?.label}`, value: `${service?.value}` }}
             options={options}
             onChange={handleChange}
           />
@@ -131,20 +132,21 @@ function Background() {
       <div className="allweather">
         <div className="weather7Days">
           {/* eslint-disable-next-line max-len */}
-          <CurrentWeather service={service} serviceLocalStorage={service?.label === 'OpenWeatherMap' ? openWeatherLocalStorage : weatherBitLocalStorage} />
-          { service?.label === 'OpenWeatherMap' ? openWeatherLocalStorage?.weather7DaysStorage?.slice(1).map((weekday) => (
+          <CurrentWeather service={service} openWeatherLocalStorage={openWeatherLocalStorage} serviceLocalStorage={service?.label === 'OpenWeatherMap' ? openWeatherLocalStorage : weatherBitLocalStorage} />
+          { service?.label === 'OpenWeatherMap' ? openWeatherLocalStorage?.weather7DaysStorage?.slice(1).map((weekday, index) => (
             <div className="EachDayWeather" key={uuid.v4().slice(0, 5)}>
               <EachDayWeather
                 temperature={weekday.temp.day}
-                weather={weekday.weather[0].main}
+                serviceLocalStorage={openWeatherLocalStorage}
+                index={index}
               />
             </div>
-          )) : weatherBitLocalStorage?.weather7DaysStorage?.slice(1).map((weekday) => (
+          )) : weatherBitLocalStorage?.weather7DaysStorage?.slice(1).map((weekday, index) => (
             <div className="EachDayWeather" key={uuid.v4().slice(0, 5)}>
-              <EachDayWeather
-                chosenService={service}
+              <EachDayWeatherBit
                 temperature={weekday?.temp}
-                weather={weekday?.weather?.description}
+                serviceLocalStorage={weatherBitLocalStorage}
+                index={index}
               />
             </div>
           ))}
