@@ -26,7 +26,7 @@ const weatherBitSlice = createSlice({
     },
     setWeather7DaysBit: (state, action) => {
       // eslint-disable-next-line no-param-reassign
-      state.weather7days = action.payload.data.filter((value, index) => index > 0 && index < 7);
+      state.weather7days = action.payload.data.filter((value, index) => index < 7);
     },
   },
 });
