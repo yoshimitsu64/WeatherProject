@@ -1,4 +1,3 @@
-import { days, date } from './DateInfo';
 import './EachDayWeather.css';
 // eslint-disable-next-line react/prop-types
 function CurrentWeather({ serviceLocalStorage, service, openWeatherLocalStorage }) {
@@ -8,7 +7,7 @@ function CurrentWeather({ serviceLocalStorage, service, openWeatherLocalStorage 
     return (
       <div className="current_weather">
         <div>
-          {days[date.getDay()]}
+          Today
         </div>
         <div className="weather">
           <div>

@@ -29,7 +29,10 @@ function Background() {
   const cityWeatherBit = useSelector(selectCityBit);
   const countryWeatherBit = useSelector(selectCountryBit);
   const weather7DaysBit = useSelector(selectWeather7DaysBit);
+
   const [service, setService] = useState(null);
+  const [backgroundWeather, setBackgroundWeather] = useState(null);
+  const [backgroundWeatherImageURL, setBackgroundWeatherImageURL] = useState(null);
   const openWeather = {
     dayStorage: date.getDay(),
     cityStorage: city,
@@ -71,6 +74,7 @@ function Background() {
   }, [service]);
   const openWeatherLocalStorage = JSON.parse(localStorage.getItem('openWeather'));
   const weatherBitLocalStorage = JSON.parse(localStorage.getItem('weatherBit'));
+  const weatherId = service?.label === 'OpenWeatherMap' ? openWeatherLocalStorage.weather7DaysStorage[0]?.weather[0]?.id : weatherBitLocalStorage?.weather7DaysStorage[0]?.weather?.code;
   // eslint-disable-next-line max-len
   switch (service?.label) {
     case 'OpenWeatherMap':
@@ -90,6 +94,45 @@ function Background() {
     default:
       console.log('no one of services');
   }
+  useEffect(() => {
+    if (weatherId >= 200 && weatherId <= 232) {
+      setBackgroundWeather('Thunderstorm');
+    } else if (weatherId >= 300 && weatherId <= 321) {
+      setBackgroundWeather('Drizzle');
+    } else if (weatherId >= 500 && weatherId <= 531) {
+      setBackgroundWeather('Rain');
+    } else if (weatherId >= 600 && weatherId <= 622) {
+      setBackgroundWeather('Snow');
+    } else if (weatherId === 800) {
+      setBackgroundWeather('Clear');
+    } else if (weatherId >= 801 && weatherId <= 804) {
+      setBackgroundWeather('Clouds');
+    }
+  }, [weatherId]);
+  useEffect(() => {
+    switch (backgroundWeather) {
+      case 'Thunderstorm':
+        setBackgroundWeatherImageURL('/pexels-andre-furtado-1162251.jpg');
+        break;
+      case 'Drizzle':
+        setBackgroundWeatherImageURL('/pexels-kaique-rocha-125510.jpg');
+        break;
+      case 'Rain':
+        setBackgroundWeatherImageURL('/pexels-kaique-rocha-125510.jpg');
+        break;
+      case 'Snow':
+        setBackgroundWeatherImageURL('/pexels-photomix-company-877398.jpg');
+        break;
+      case 'Clear':
+        setBackgroundWeatherImageURL('/pexels-max-andrey-1068989.jpg');
+        break;
+      case 'Clouds':
+        setBackgroundWeatherImageURL('/pexels-lisa-1662145.jpg');
+        break;
+      default:
+        setBackgroundWeatherImageURL('/pexels-max-andrey-1068989.jpg');
+    }
+  }, [backgroundWeather]);
   return (
     <div className="Background">
       <div className="Background_location_info">
@@ -122,7 +165,7 @@ function Background() {
           />
         </div>
       </div>
-      <img alt="unloaded" src="/pexels-bill-white-165537.jpg" className="image" />
+      <img alt="unloaded" src={backgroundWeatherImageURL} className="image" />
       <div className="allweather">
         <div className="weather7Days">
           {/* eslint-disable-next-line max-len */}
