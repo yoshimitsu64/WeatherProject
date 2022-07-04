@@ -1,6 +1,6 @@
 import './EachDayWeather.css';
 // eslint-disable-next-line react/prop-types
-function CurrentWeather({ serviceLocalStorage, service, openWeatherLocalStorage }) {
+function CurrentWeather({ serviceLocalStorage, service }) {
   // eslint-disable-next-line react/prop-types
   // eslint-disable-next-line react/prop-types,max-len
   if (serviceLocalStorage?.weather7DaysStorage[0]?.temp?.day || serviceLocalStorage?.weather7DaysStorage[0]?.temp) {
@@ -17,7 +17,7 @@ function CurrentWeather({ serviceLocalStorage, service, openWeatherLocalStorage 
           </div>
           <div>
             {/* eslint-disable-next-line react/prop-types */}
-            <img alt="didnt load" src={service?.label === 'OpenWeatherMap' ? `http://openweathermap.org/img/wn/${openWeatherLocalStorage?.weather7DaysStorage[0]?.weather[0]?.icon}@2x.png` : `https://www.weatherbit.io/static/img/icons/${serviceLocalStorage?.weather7DaysStorage[0]?.weather?.icon}.png`} />
+            <img alt="didnt load" src={service?.label === 'OpenWeatherMap' ? `http://openweathermap.org/img/wn/${serviceLocalStorage?.weather7DaysStorage[0]?.weather[0]?.icon}@2x.png` : `https://www.weatherbit.io/static/img/icons/${serviceLocalStorage?.weather7DaysStorage[0]?.weather?.icon}.png`} />
           </div>
         </div>
       </div>

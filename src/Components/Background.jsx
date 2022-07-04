@@ -30,6 +30,7 @@ function Background() {
   const countryWeatherBit = useSelector(selectCountryBit);
   const weather7DaysBit = useSelector(selectWeather7DaysBit);
 
+  const [weatherID, setWeatherID] = useState(null);
   const [service, setService] = useState(null);
   const [backgroundWeather, setBackgroundWeather] = useState(null);
   const [backgroundWeatherImageURL, setBackgroundWeatherImageURL] = useState(null);
@@ -61,6 +62,8 @@ function Background() {
       },
     );
   }
+  const openWeatherLocalStorage = JSON.parse(localStorage.getItem('openWeather'));
+  const weatherBitLocalStorage = JSON.parse(localStorage.getItem('weatherBit'));
   useEffect(() => {
     // eslint-disable-next-line no-unused-expressions
     if (!localStorage.getItem('chosenService')) {
@@ -71,10 +74,8 @@ function Background() {
     } else if (service) {
       localStorage.setItem('chosenService', JSON.stringify(service));
     }
+    setWeatherID(service?.label === 'OpenWeatherMap' ? openWeatherLocalStorage?.weather7DaysStorage[0]?.weather[0]?.id : weatherBitLocalStorage?.weather7DaysStorage[0]?.weather?.code);
   }, [service]);
-  const openWeatherLocalStorage = JSON.parse(localStorage.getItem('openWeather'));
-  const weatherBitLocalStorage = JSON.parse(localStorage.getItem('weatherBit'));
-  const weatherId = service?.label === 'OpenWeatherMap' ? openWeatherLocalStorage.weather7DaysStorage[0]?.weather[0]?.id : weatherBitLocalStorage?.weather7DaysStorage[0]?.weather?.code;
   // eslint-disable-next-line max-len
   switch (service?.label) {
     case 'OpenWeatherMap':
@@ -95,20 +96,20 @@ function Background() {
       console.log('no one of services');
   }
   useEffect(() => {
-    if (weatherId >= 200 && weatherId <= 232) {
+    if (weatherID >= 200 && weatherID <= 232) {
       setBackgroundWeather('Thunderstorm');
-    } else if (weatherId >= 300 && weatherId <= 321) {
+    } else if (weatherID >= 300 && weatherID <= 321) {
       setBackgroundWeather('Drizzle');
-    } else if (weatherId >= 500 && weatherId <= 531) {
+    } else if (weatherID >= 500 && weatherID <= 531) {
       setBackgroundWeather('Rain');
-    } else if (weatherId >= 600 && weatherId <= 622) {
+    } else if (weatherID >= 600 && weatherID <= 622) {
       setBackgroundWeather('Snow');
-    } else if (weatherId === 800) {
+    } else if (weatherID === 800) {
       setBackgroundWeather('Clear');
-    } else if (weatherId >= 801 && weatherId <= 804) {
+    } else if (weatherID >= 801 && weatherID <= 804) {
       setBackgroundWeather('Clouds');
     }
-  }, [weatherId]);
+  }, [weatherID]);
   useEffect(() => {
     switch (backgroundWeather) {
       case 'Thunderstorm':
@@ -130,7 +131,7 @@ function Background() {
         setBackgroundWeatherImageURL('/pexels-lisa-1662145.jpg');
         break;
       default:
-        setBackgroundWeatherImageURL('/pexels-max-andrey-1068989.jpg');
+        console.log('none image');
     }
   }, [backgroundWeather]);
   return (
@@ -169,7 +170,7 @@ function Background() {
       <div className="allweather">
         <div className="weather7Days">
           {/* eslint-disable-next-line max-len */}
-          <CurrentWeather service={service} openWeatherLocalStorage={openWeatherLocalStorage} serviceLocalStorage={service?.label === 'OpenWeatherMap' ? openWeatherLocalStorage : weatherBitLocalStorage} />
+          <CurrentWeather service={service} serviceLocalStorage={service?.label === 'OpenWeatherMap' ? openWeatherLocalStorage : weatherBitLocalStorage} />
           { service?.label === 'OpenWeatherMap' ? openWeatherLocalStorage?.weather7DaysStorage?.slice(1).map((weekday, index) => (
             <div className="EachDayWeather" key={uuid.v4().slice(0, 5)}>
               <EachDayWeather
